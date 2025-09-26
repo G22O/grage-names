@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <title>كــراج الميكانيك | Thuraya city</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #ffd700;
+      --glass-bg: rgba(255, 255, 255, 0.1);
+      --glass-border: rgba(255, 255, 255, 0.2);
+      --input-bg: rgba(255, 255, 255, 0.2);
+      --input-border: rgba(255, 255, 255, 0.3);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+      background: #2f3136; /* رمادي غامق */
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* الصورة في أعلى اليسار */
+    .top-left-img {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      width: 100px;
+      height: auto;
+      z-index: 1000;
+      user-select: none;
+      pointer-events: none;
+    }
+
+    /* الصورة في منتصف الصفحة */
+    .center-img {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: auto;
+      opacity: 0.06;
+      pointer-events: none;
+      z-index: 0;
+      user-select: none;
+    }
+
+    .card {
+      backdrop-filter: blur(14px);
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      position: relative;
+      z-index: 10;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 18px; /* حجم أصغر */
+      margin-bottom: 24px;
+    }
+
+    .inputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .small-input {
+      flex: 1 1 48%;
+      min-width: 120px;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--input-border);
+      background: var(--input-bg);
+      color: white;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .small-input:focus {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    .full {
+      flex-basis: 100%;
+    }
+
+    .btn {
+      width: 100%;
+      background: var(--accent);
+      border: none;
+      padding: 14px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: bold;
+      color: #000;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn:hover {
+      background: #e6c200;
+    }
+
+    .result {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 16px;
+      min-height: 32px;
+    }
+
+    .copy-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 14px;
+    }
+
+    .copy-field {
+      flex: 1;
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 10px 12px;
+      display: flex;
+      align-items: center;
+      color: #fff;
+    }
+
+    .copy-field input {
+      background: transparent;
+      border: none;
+      outline: none;
+      width: 100%;
+      color: #fff;
+      font-size: 15px;
+    }
+
+    .copy-btn {
+      background: rgba(255,255,255,0.2);
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .copy-btn:hover {
+      background: rgba(255,255,255,0.35);
+    }
+
+    .icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.8);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 14px;
+      opacity: 0;
+      transition: opacity 0.3s ease, bottom 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .toast.show {
+      opacity: 1;
+      bottom: 40px;
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- الصورة في أعلى اليسار -->
+  <img src="2c4e8a1edb2b43b4.png" alt="شعار" class="top-left-img">
+
+  <!-- الصورة في منتصف الصفحة -->
+  <img src="85474.png" alt="شعار خلفي" class="center-img">
+
+  <div class="card">
+    <h1>كراج الميكانيك — المسمى الميداني</h1>
+
+    <div class="inputs">
+      <input class="small-input" id="name" placeholder="الاسم">
+      <input class="small-input" id="code" placeholder="الكود">
+      <input class="small-input full" id="direction" placeholder="التوجيه">
+    </div>
+
+    <button class="btn" id="showBtn">عـرض الإســم</button>
+
+    <div class="result" id="resultArea"></div>
+
+    <div class="copy-row">
+      <div class="copy-field">
+        <input id="nameCopy" readonly placeholder="سيظهر الاسم هنا">
+      </div>
+      <button class="copy-btn" title="نسخ الاسم" data-target="nameCopy" onclick="copyHandler(event)">
+        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2"/>
+          <rect x="1" y="1" width="13" height="13" rx="2"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status">تم النسخ!</div>
+
+  <script>
+    const showBtn = document.getElementById('showBtn');
+    const resultArea = document.getElementById('resultArea');
+    const nameCopy = document.getElementById('nameCopy');
+    const toast = document.getElementById('toast');
+
+    showBtn.addEventListener('click', () => {
+      const name = document.getElementById('name').value.trim();
+      const code = document.getElementById('code').value.trim();
+      const direction = document.getElementById('direction').value.trim();
+
+      if (!name || !code || !direction) {
+        resultArea.textContent = 'يرجى تعبئة جميع الحقول.';
+        nameCopy.value = '';
+        showToast('يرجى تعبئة جميع الحقول.');
+        return;
+      }
+
+      const combined = `${code} | ${name} | ${direction}`;
+      resultArea.innerHTML = `<strong>${combined}</strong>`;
+      nameCopy.value = combined;
+    });
+
+    function copyHandler(e) {
+      const btn = e.currentTarget;
+      const targetId = btn.getAttribute('data-target');
+      const input = document.getElementById(targetId);
+      const text = input?.value || input?.placeholder || '';
+
+      if (!text.trim()) {
+        showToast('لا يوجد شيء لنسخه.');
+        return;
+      }
+
+      navigator.clipboard.writeText(text).then(() => {
+        showToast('تم النسخ!');
+      }).catch(() => {
+        input.select();
+        document.execCommand('copy');
+        showToast('تم النسخ!');
+      });
+    }
+
+    let toastTimer = null;
+    function showToast(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>
